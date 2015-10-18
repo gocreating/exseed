@@ -31,10 +31,10 @@ A highly extensible nodejs framework.
 | Extensibility | ★★★★★ | ★★★★★ | ★★★★☆ | ★★★★☆ | ★★★★☆ |
 | Threshold     | ★★★☆☆ | ★★☆☆☆ | ★★★☆☆ | ★★★★☆ | ★★☆☆☆ |
 | Build Speed   | ★★★★★ | ★☆☆☆☆ | ★☆☆☆☆ | ★★★★☆ | ★☆☆☆☆ |
-| Full Stack    | [x]    | [ ]     | [ ]    | [x]    | [ ]    |
-| ORM           | [x]    | [ ]     | [ ]    | [x]    | [ ]    |
-| Modern Syntax | [x]    | [ ]     | [ ]    | [ ]    | [ ]    |
-| Isomorphic    | [x]    | [ ]     | [ ]    | [ ]    | [ ]    |
+| Full Stack    | ✔      |         |        | ✔      |        |
+| ORM           | ✔      |         |        | ✔      |        |
+| Modern Syntax | ✔      |         | ✔      |        |        |
+| Isomorphic    | ✔      |         |        |        |        |
 
 ## Example
 
