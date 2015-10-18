@@ -20,9 +20,21 @@ A highly extensible nodejs framework.
 | Automation | [Gulp](https://github.com/gulpjs/gulp) |
 | Backend    | [Node](https://nodejs.org/en/), [Express(>=4.0.0)](http://expressjs.com/) |
 | ORM        | [Waterline](https://github.com/balderdashy/waterline) |
-| Frontend   | [React](https://facebook.github.io/react/), [Redux](https://github.com/rackt/redux), [React-Router-Component](https://github.com/STRML/react-router-component) |
+| Frontend   | [React](https://facebook.github.io/react/), [Redux](https://github.com/rackt/redux)/[Alt](http://alt.js.org/), [React-Router-Component](https://github.com/STRML/react-router-component) |
 | Testing    | [Mocha](https://mochajs.org/) |
 | CI         | [Travis CI](https://travis-ci.org/) |
+
+## Compare to Other Frameworks
+
+|               | Seed   | Express | Koa    | Sails  | Hapi   |
+| ------------- | ------ | ------- | ------ | ------ | ------ |
+| Extensibility | ★★★★★ | ★★★★★ | ★★★★☆ | ★★★★☆ | ★★★★☆ |
+| Threshold     | ★★★☆☆ | ★★☆☆☆ | ★★★☆☆ | ★★★★☆ | ★★☆☆☆ |
+| Build Speed   | ★★★★★ | ★☆☆☆☆ | ★☆☆☆☆ | ★★★★☆ | ★☆☆☆☆ |
+| Full Stack    | [x]    | [ ]     | [ ]    | [x]    | [ ]    |
+| ORM           | [x]    | [ ]     | [ ]    | [x]    | [ ]    |
+| Modern Syntax | [x]    | [ ]     | [ ]    | [ ]    | [ ]    |
+| Isomorphic    | [x]    | [ ]     | [ ]    | [ ]    | [ ]    |
 
 ## Example
 
@@ -77,7 +89,7 @@ seed.run((app) => {
 });
 ```
 
-#### <some app>/index.js
+#### some_app/index.js
 
 ```
 import seed from 'seed';
@@ -112,7 +124,7 @@ export default class ExampleApp extends seed.App {
 
     // api routing with resources
 
-    // Policy 1 - mount helper function `resource` onto app
+    // Policy 1 - mount helper function `resource` onto `app`
     app.resource(new seed.Resource('api'));
     app.resource(new UserResources({
       prefix: 'api',
@@ -125,6 +137,7 @@ export default class ExampleApp extends seed.App {
     }));
 
     // Policy 2 - integrate with express router
+    // I personally prefer this policy since its flexibility
     const apiRouter = express.router();
     apiRouter.use('', new UserResources('users').router());
     apiRouter.use('', new ImageResources('images').router());
@@ -167,30 +180,61 @@ export default class ExampleApp extends seed.App {
 The `rails` like resource
 
 ```
-// UserResource.js
+/**
+ * A rest style controller that implements rest actions:
+ *
+ *   GET     /         -> index
+ *   GET     /new      -> new
+ *   POST    /         -> create
+ *   GET     /:id      -> show
+ *   GET     /:id/edit -> edit
+ *   PUT     /:id      -> update
+ *   DELETE  /:id      -> destroy
+ */
+class seed.Resources extends seed.Controller {
+    // TO-DO
+}
+```
+
+```
+// UserResources.js
 import seed from 'seed';
 import {loginRequired, permissionRequired} from 'seed';
 const {UserModel} = seed.getModels();
 
-export default class UserResource extends seed.Resources {
+export default class UserResources extends seed.Resources {
   constructor(resourcesName, idFormat) {
     super(resourcesName, idFormat);
   }
 
-  // override the restful `create` method
+  // override default `create` method
   create(req, res) {
     UserModel.register(...);
   }
 
-  // override the restful `delete` method
+  // override default `delete` method
   @loginRequired
   @permissionRequired('ALLOW_DELETE_USER')
-  delete(req, res) {
+  destroy(req, res) {
     UserModel
       .findById(req.params.id)
       .rmeove((err, deletedUser) => {
         res.jsonp(deletedUser);
       });
+  }
+};
+```
+
+```
+// ImageResources.js
+import seed from 'seed';
+import {loginRequired, permissionRequired} from 'seed';
+const {UserModel} = seed.getModels();
+
+// extends from UserResources to build nested resources
+export default class ImageResources extends UserResources {
+  constructor(resourcesName, idFormat) {
+    super(resourcesName, idFormat);
   }
 };
 ```
