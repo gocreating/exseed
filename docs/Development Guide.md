@@ -11,3 +11,19 @@ $ gulp
 ```
 
 install packages and use gulp to watch and rebuild source files
+
+## Linking
+
+```
+$ npm link
+```
+
+create symbolic link
+
+## Usage
+
+```
+$ seed
+$ seed help
+$ seed hello
+```
