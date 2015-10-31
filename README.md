@@ -53,6 +53,9 @@ The file structure takes the advantage of `django`, which means there are severa
 ----- app.js                    <!-- project entry -->
 ----- <app name 1>/
 --------- index.js              <!-- backend app entry -->
+--------- tasks/                <!-- task files -->
+------------- task1.js
+------------- task2.js
 --------- flux/
 ------------- views/
 ------------- actions/
@@ -74,11 +77,18 @@ The file structure takes the advantage of `django`, which means there are severa
 - package.json
 ```
 
+### CLI
+
+```
+$ seed create <app_name>
+$ seed <app_name> <task_name> [-args]
+```
+
 ### Code Snippets
 
 #### app.js
 
-```
+```js
 import seed from 'seed';
 
 seed.registerApp('basic', require('./basic'));
@@ -91,7 +101,7 @@ seed.run((app) => {
 
 #### some_app/index.js
 
-```
+```js
 import seed from 'seed';
 
 export default class ExampleApp extends seed.App {
@@ -169,7 +179,7 @@ export default class ExampleApp extends seed.App {
     switch (err) {
       case 'PageNotFound':
       case 'Unauthorize':
-      case ...
+      case ...:
     }
   }
 };
@@ -179,7 +189,7 @@ export default class ExampleApp extends seed.App {
 
 The `rails` like resource
 
-```
+```js
 /**
  * A rest style controller that implements rest actions:
  *
@@ -196,7 +206,7 @@ class seed.Resources extends seed.Controller {
 }
 ```
 
-```
+```js
 // UserResources.js
 import seed from 'seed';
 import {loginRequired, permissionRequired} from 'seed';
@@ -225,7 +235,7 @@ export default class UserResources extends seed.Resources {
 };
 ```
 
-```
+```js
 // ImageResources.js
 import seed from 'seed';
 import {loginRequired, permissionRequired} from 'seed';
