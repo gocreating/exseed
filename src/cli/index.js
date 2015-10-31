@@ -1,6 +1,6 @@
 export function displayUsage() {
   console.log(`
-    Usage: seed <command> [options]
+    Usage: sd <command> [options]
 
     Commands:
       hello   say hello

@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.displayUsage = displayUsage;
 exports.run = run;
 function displayUsage() {
-  console.log('\n    Usage: seed <command> [options]\n\n    Commands:\n      hello   say hello\n      help    display help message\n  ');
+  console.log('\n    Usage: sd <command> [options]\n\n    Commands:\n      hello   say hello\n      help    display help message\n  ');
 }
 
 function run() {
