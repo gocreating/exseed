@@ -23,7 +23,7 @@ create symbolic link
 ## Usage
 
 ```
-$ seed
-$ seed help
-$ seed hello
+$ sd
+$ sd help
+$ sd hello
 ```
