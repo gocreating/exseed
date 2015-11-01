@@ -1,4 +1,4 @@
-# Seed
+# Exseed
 
 A highly extensible nodejs framework.
 
@@ -26,7 +26,7 @@ A highly extensible nodejs framework.
 
 ## Compare to Other Frameworks
 
-|               | Seed   | Express | Koa    | Sails  | Hapi   |
+|               | Exseed   | Express | Koa    | Sails  | Hapi   |
 | ------------- | ------ | ------- | ------ | ------ | ------ |
 | Extensibility | ★★★★★ | ★★★★★ | ★★★★☆ | ★★★★☆ | ★★★★☆ |
 | Threshold     | ★★★☆☆ | ★★☆☆☆ | ★★★☆☆ | ★★★★☆ | ★★☆☆☆ |
@@ -47,15 +47,13 @@ The file structure takes the advantage of `django`, which means there are severa
 ```
 <project name>/
 - node_modules/
------ seed/                     <!-- this is what we are going to work on -->
+----- exseed/                     <!-- this is what we are going to work on -->
 - gulp/                         <!-- gulp tasks and webpack configurations -->
 - src/
 ----- app.js                    <!-- project entry -->
 ----- <app name 1>/
+--------- config.js             <!-- configuration file of current app -->
 --------- index.js              <!-- backend app entry -->
---------- tasks/                <!-- task files -->
-------------- task1.js
-------------- task2.js
 --------- flux/
 ------------- views/
 ------------- actions/
@@ -77,34 +75,36 @@ The file structure takes the advantage of `django`, which means there are severa
 - package.json
 ```
 
-### CLI
-
-```
-$ seed create <app_name>
-$ seed <app_name> <task_name> [-args]
-```
-
 ### Code Snippets
 
 #### app.js
 
-```js
-import seed from 'seed';
+```
+import exseed from 'exseed';
 
-seed.registerApp('basic', require('./basic'));
-seed.registerApp('user', require('./user'));
-seed.registerApp('todo', require('./todo'));
-seed.run((app) => {
+exseed.registerApp('basic', require('./basic'));
+exseed.registerApp('user', require('./user'));
+exseed.registerApp('todo', require('./todo'));
+exseed.run((app) => {
   app.listen(...);
 });
 ```
 
+#### some_app/config.js
+
+```
+export default {
+  name: 'app_1',
+  version: '1.0.0'
+}
+```
+
 #### some_app/index.js
 
-```js
-import seed from 'seed';
+```
+import exseed from 'exseed';
 
-export default class ExampleApp extends seed.App {
+export default class ExampleApp extends exseed.App {
   constructor(app) {
   }
 
@@ -118,8 +118,8 @@ export default class ExampleApp extends seed.App {
     app.use(someMiddleware);
 
     // register models
-    seed.registerModel(model_1);
-    seed.registerModel(model_2);
+    exseed.registerModel(model_1);
+    exseed.registerModel(model_2);
   }
 
   /**
@@ -135,13 +135,13 @@ export default class ExampleApp extends seed.App {
     // api routing with resources
 
     // Policy 1 - mount helper function `resource` onto `app`
-    app.resource(new seed.Resource('api'));
+    app.resource(new exseed.Resource('api'));
     app.resource(new UserResources({
       prefix: 'api',
       name: 'users',
     }));
     app.resource(new ImageResources('images'));
-    app.resource(new seed.Resources({
+    app.resource(new exseed.Resources({
       prefix: 'api',
       name: 'todos',
     }));
@@ -151,23 +151,23 @@ export default class ExampleApp extends seed.App {
     const apiRouter = express.router();
     apiRouter.use('', new UserResources('users').router());
     apiRouter.use('', new ImageResources('images').router());
-    apiRouter.use('', new seed.Resources('todos').router());
+    apiRouter.use('', new exseed.Resources('todos').router());
     router.use('/api', apiRouter);
 
     // Policy 3 - resource tree
     app.resource(
-      new seed.ResourceTree({
+      new exseed.ResourceTree({
         prefix: 'api',
         resources: [
-          new seed.ResourceTree({
+          new exseed.ResourceTree({
             name: 'users',
             resources: [
-              new seed.ResourceTree({
+              new exseed.ResourceTree({
                 name: 'images',
               }),
             ],
           }),
-          new seed.ResourceTree({
+          new exseed.ResourceTree({
             name: 'todos',
           }),
         ],
@@ -179,7 +179,7 @@ export default class ExampleApp extends seed.App {
     switch (err) {
       case 'PageNotFound':
       case 'Unauthorize':
-      case ...:
+      case ...
     }
   }
 };
@@ -189,7 +189,7 @@ export default class ExampleApp extends seed.App {
 
 The `rails` like resource
 
-```js
+```
 /**
  * A rest style controller that implements rest actions:
  *
@@ -201,18 +201,18 @@ The `rails` like resource
  *   PUT     /:id      -> update
  *   DELETE  /:id      -> destroy
  */
-class seed.Resources extends seed.Controller {
+class exseed.Resources extends exseed.Controller {
     // TO-DO
 }
 ```
 
-```js
+```
 // UserResources.js
-import seed from 'seed';
-import {loginRequired, permissionRequired} from 'seed';
-const {UserModel} = seed.getModels();
+import exseed from 'exseed';
+import {loginRequired, permissionRequired} from 'exseed';
+const {UserModel} = exseed.getModels();
 
-export default class UserResources extends seed.Resources {
+export default class UserResources extends exseed.Resources {
   constructor(resourcesName, idFormat) {
     super(resourcesName, idFormat);
   }
@@ -235,11 +235,11 @@ export default class UserResources extends seed.Resources {
 };
 ```
 
-```js
+```
 // ImageResources.js
-import seed from 'seed';
-import {loginRequired, permissionRequired} from 'seed';
-const {UserModel} = seed.getModels();
+import exseed from 'exseed';
+import {loginRequired, permissionRequired} from 'exseed';
+const {UserModel} = exseed.getModels();
 
 // extends from UserResources to build nested resources
 export default class ImageResources extends UserResources {
