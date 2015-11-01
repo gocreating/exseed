@@ -52,6 +52,7 @@ The file structure takes the advantage of `django`, which means there are severa
 - src/
 ----- app.js                    <!-- project entry -->
 ----- <app name 1>/
+--------- config.js             <!-- configuration file of current app -->
 --------- index.js              <!-- backend app entry -->
 --------- flux/
 ------------- views/
@@ -87,6 +88,15 @@ exseed.registerApp('todo', require('./todo'));
 exseed.run((app) => {
   app.listen(...);
 });
+```
+
+#### some_app/config.js
+
+```
+export default {
+  name: 'app_1',
+  version: '1.0.0'
+}
 ```
 
 #### some_app/index.js
