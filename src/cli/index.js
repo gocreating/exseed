@@ -29,13 +29,9 @@ export function run() {
   // run
   else if (command === 'run') {
     const cmd = 'node ./build/debug/app.js';
-    console.log(`execute ${cmd}`);
-    exec(cmd, (err, stdout, stderr) => {
-      if (stderr) {
-        console.log(stderr);
-      } else {
-        console.log(stdout);
-      }
-    });
+    console.log(`execute ${cmd}\n`);
+    let nodeApp = exec(cmd);
+    nodeApp.stdout.pipe(process.stdout);
+    nodeApp.stderr.pipe(process.stdout);
   }
 }

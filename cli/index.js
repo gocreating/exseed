@@ -31,13 +31,9 @@ function run() {
       // run
       else if (command === 'run') {
           var cmd = 'node ./build/debug/app.js';
-          console.log('execute ' + cmd);
-          (0, _child_process.exec)(cmd, function (err, stdout, stderr) {
-            if (stderr) {
-              console.log(stderr);
-            } else {
-              console.log(stdout);
-            }
-          });
+          console.log('execute ' + cmd + '\n');
+          var nodeApp = (0, _child_process.exec)(cmd);
+          nodeApp.stdout.pipe(process.stdout);
+          nodeApp.stderr.pipe(process.stdout);
         }
 }
