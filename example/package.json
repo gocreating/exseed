@@ -1,0 +1,19 @@
+{
+  "name": "exseed-example",
+  "version": "0.1.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "gocreating",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-preset-es2015": "^6.0.15",
+    "babel-preset-stage-0": "^6.0.15",
+    "babel-preset-stage-1": "^6.0.15",
+    "gulp": "^3.9.0",
+    "gulp-babel": "^6.0.0",
+    "gulp-changed": "^1.3.0"
+  }
+}

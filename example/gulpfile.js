@@ -17,7 +17,7 @@ gulp.task('watch', function() {
 gulp.task('build', function() {
   return gulp
     .src('./src/**/*.js')
-    .pipe(changed('./'))
+    .pipe(changed('./build/debug'))
     .pipe(babel({
       presets: [
         'es2015',
@@ -26,7 +26,7 @@ gulp.task('build', function() {
       ],
     }))
     .on('error', errorHandler)
-    .pipe(gulp.dest('./'));
+    .pipe(gulp.dest('./build/debug'));
 });
 
 // run gulp tasks

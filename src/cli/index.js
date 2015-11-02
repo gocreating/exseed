@@ -1,3 +1,5 @@
+import {exec} from 'child_process';
+
 export function displayUsage() {
   console.log(`
     Usage: sd <command> [options]
@@ -9,14 +11,31 @@ export function displayUsage() {
 }
 
 export function run() {
-  let userArgs = process.argv.slice(2);
-  let command = userArgs[0];
+  const userArgs = process.argv.slice(2);
+  const command = userArgs[0];
 
+  // no command
   if (command === undefined) {
     displayUsage();
-  } else if (command === 'hello') {
+  }
+  // hello
+  else if (command === 'hello') {
     console.log('hello world');
-  } else if (command === 'help') {
+  }
+  // help
+  else if (command === 'help') {
     displayUsage();
+  }
+  // run
+  else if (command === 'run') {
+    const cmd = 'node ./build/debug/app.js';
+    console.log(`execute ${cmd}`);
+    exec(cmd, (err, stdout, stderr) => {
+      if (stderr) {
+        console.log(stderr);
+      } else {
+        console.log(stdout);
+      }
+    });
   }
 }
