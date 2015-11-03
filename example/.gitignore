@@ -4,6 +4,14 @@ node_modules
 # Sublime workspace configuration
 sftp-configuration.json
 
+# Build files
+build
+
+# Databases
+db.development.sqlite
+db.test.sqlite
+db.production.sqlite
+
 # Secret
 github
 github.pub
