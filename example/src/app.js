@@ -1,24 +1,7 @@
 import * as exseed from 'exseed';
-import BasicApp from './basic/index';
-import UserApp from './user/index';
 import Waterline from 'waterline';
-import waterlineSqlite3 from 'waterline-sqlite3';
 import http from 'http';
-
-const config = {
-  adapters: {
-    'sqlite3': waterlineSqlite3
-  },
-  connections: {
-    default: {
-      adapter: 'sqlite3',
-      type: 'disk',
-      // base on cwd (current working directory)
-      filename: './db.development.sqlite',
-      debug: true, // show SQL queries or not
-    },
-  },
-};
+import settings from './settings.server';
 
 const User = Waterline.Collection.extend({
   identity: 'user',
@@ -31,7 +14,7 @@ const User = Waterline.Collection.extend({
 
 const waterline = new Waterline();
 waterline.loadCollection(User);
-waterline.initialize(config, (err, ontology) => {
+waterline.initialize(settings.db.development, (err, ontology) => {
   if (err) {
     return console.error(err);
   }
@@ -45,17 +28,18 @@ waterline.initialize(config, (err, ontology) => {
       lastName: 'Armstrong',
     })
     .then((user) => {
-      console.dir(user);
+      console.log(user.toObject());
     })
     .catch((err) => {
       console.error(err);
     });
 });
 
-exseed.registerApp('basic', BasicApp);
-exseed.registerApp('user', UserApp);
+exseed.init(settings);
+exseed.registerApp('basic', require('./basic/').default);
+exseed.registerApp('user', require('./user/').default);
 exseed.run(app => {
-  const port = 3000;
+  const port = settings.server.port.development;
   app.httpServer = http
     .createServer(app)
     .listen(port, () => {

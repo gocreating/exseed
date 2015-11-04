@@ -1,9 +1,16 @@
 import express from 'express';
+import assign from 'object-assign';
 
 let rootExpressApp = express();
 
 // a map structure storing registered apps
 let appMap = {};
+
+let appSettings = {};
+
+export function init(customSettings) {
+  assign(appSettings, customSettings);
+}
 
 export class App {
   constructor(expressApp) {
