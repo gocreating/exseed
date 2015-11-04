@@ -1,6 +1,6 @@
 import http from 'http';
-import express from 'express';
-import Waterline from 'waterline';
+import _express from 'express';
+import _Waterline from 'waterline';
 import assign from 'object-assign';
 import async from 'async';
 
@@ -10,14 +10,15 @@ export const env = {
   test: ENV === 'test',
   production: ENV === 'production',
 }
+export const Waterline = _Waterline;
 
-let rootExpressApp = express();
+let rootExpressApp = _express();
 
 // a map structure storing registered apps
 let appMap = {};
 let appSettings = {};
 
-const waterline = new Waterline();
+const _waterline = new _Waterline();
 
 
 export class App {
@@ -34,22 +35,22 @@ export function getApps() {
 }
 
 export function registerApp(appName, appClass) {
-  const expressApp = express();
+  const expressApp = _express();
   const appInstance = new appClass(expressApp);
   appMap[appName] = appInstance;
   return appInstance;
 }
 
 export function registerModel(schema) {
-  const collection = Waterline.Collection.extend(schema);
-  waterline.loadCollection(collection);
+  let collections = _Waterline.Collection.extend(schema)
+  _waterline.loadCollection(collections);
 }
 
 export function init(customSettings, cb) {
   assign(appSettings, customSettings);
 
   // initialize ORM
-  waterline.initialize(appSettings.db[ENV], (err, ontology) => {
+  _waterline.initialize(appSettings.db[ENV], (err, ontology) => {
     if (err) {
       return cb(err);
     }
