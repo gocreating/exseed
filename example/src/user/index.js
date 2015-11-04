@@ -15,8 +15,9 @@ class UserApp extends App {
     if (env.development) {
       models.user
         .create({
-          firstName: 'Neil',
-          lastName: 'Armstrong',
+          email: 'test@test.test',
+          name: 'test',
+          password: 'test',
         })
         .then((user) => {
           console.log(user.toObject());
