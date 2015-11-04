@@ -5,23 +5,10 @@ import settings from './settings.server';
 exseed.registerApp('basic', require('./basic/').default);
 exseed.registerApp('user', require('./user/').default);
 
-exseed.registerModel(require('./user/models/user').default);
-
 exseed.init(settings, (err, models) => {
   if (err) {
     throw err;
   }
-  models.user
-    .create({
-      firstName: 'Neil',
-      lastName: 'Armstrong',
-    })
-    .then((user) => {
-      console.log(user.toObject());
-    })
-    .catch((err) => {
-      console.error(err);
-    });
 });
 
 exseed.run(app => {

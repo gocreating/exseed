@@ -1,8 +1,30 @@
-import { App } from 'exseed';
+import {
+  App,
+  registerModel,
+  env
+} from 'exseed';
 
 class UserApp extends App {
   constructor(app) {
     super(app);
+    registerModel(require('./models/user').default);
+  }
+
+  init(models) {
+    // insert data in development env
+    if (env.development) {
+      models.user
+        .create({
+          firstName: 'Neil',
+          lastName: 'Armstrong',
+        })
+        .then((user) => {
+          console.log(user.toObject());
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
   }
 
   routing(app, router, models) {

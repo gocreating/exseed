@@ -2,7 +2,12 @@ import express from 'express';
 import Waterline from 'waterline';
 import assign from 'object-assign';
 
-export const env = process.env.NODE_ENV || 'development';
+export const ENV = process.env.NODE_ENV || 'development';
+export const env = {
+  development: ENV === 'development',
+  test: ENV === 'test',
+  production: ENV === 'production',
+}
 
 let rootExpressApp = express();
 
@@ -12,21 +17,13 @@ let appSettings = {};
 
 const waterline = new Waterline();
 
-export function init(customSettings, cb) {
-  assign(appSettings, customSettings);
-
-  // initialize ORM
-  waterline.initialize(appSettings.db[env], (err, ontology) => {
-    if (err) {
-      return cb(err);
-    }
-    cb(null, ontology.collections);
-  });
-}
 
 export class App {
   constructor(expressApp) {
     this.expressApp = expressApp;
+  }
+
+  init(models) {
   }
 }
 
@@ -44,6 +41,22 @@ export function registerApp(appName, appClass) {
 export function registerModel(schema) {
   const collection = Waterline.Collection.extend(schema);
   waterline.loadCollection(collection);
+}
+
+export function init(customSettings, cb) {
+  assign(appSettings, customSettings);
+
+  // initialize ORM
+  waterline.initialize(appSettings.db[ENV], (err, ontology) => {
+    if (err) {
+      return cb(err);
+    }
+    for (let appName in appMap) {
+      let exseedApp = appMap[appName];
+      exseedApp.init(ontology.collections);
+    }
+    cb(null, ontology.collections);
+  });
 }
 
 export function run(cb) {
