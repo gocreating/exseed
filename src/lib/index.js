@@ -1,75 +1,129 @@
 import http from 'http';
-import _express from 'express';
-import _Waterline from 'waterline';
+import express from 'express';
+import Waterline from 'waterline';
 import assign from 'object-assign';
 import async from 'async';
 
+
+// registered app instances
+let _appMap = {};
+
+// setting object
+let _appSettings = {};
+
+// waterline orm instance
+const _waterline = new Waterline();
+
+// the top level express app
+const _rootExpressApp = express();
+
+/**
+ * Environment related variables
+ */
 export const ENV = process.env.NODE_ENV || 'development';
 export const env = {
   development: ENV === 'development',
   test: ENV === 'test',
   production: ENV === 'production',
 }
-export const Waterline = _Waterline;
 
-let rootExpressApp = _express();
-
-// a map structure storing registered apps
-let appMap = {};
-let appSettings = {};
-
-const _waterline = new _Waterline();
-
-
+/**
+ * App class
+ * @class
+ */
 export class App {
-  constructor(expressApp) {
-    this.expressApp = expressApp;
+  /**
+   * Generates a new express app,
+   * and mount it onto the top level express app
+   * @constructs App
+   */
+  constructor() {
+    /**
+     * The express app
+     * @member App#expressApp
+     */
+    this.expressApp = express();
+    _rootExpressApp.use('/', this.expressApp);
   }
 
   init(models) {
   }
 }
 
-export function getApps() {
-  return appMap;
-}
-
+/**
+ * Register an exseed app
+ * @param {string} appName - An identifier of exseed app
+ * @param {App} appClass
+ *   - An exseed app class declaration extends from App
+ */
 export function registerApp(appName, appClass) {
-  const expressApp = _express();
-  const appInstance = new appClass(expressApp);
-  appMap[appName] = appInstance;
+  const appInstance = new appClass();
+  _appMap[appName] = appInstance;
   return appInstance;
 }
 
+/**
+ * Register a waterline model
+ * @param {object} schema - A waterline schema definition
+ */
 export function registerModel(schema) {
-  let collections = _Waterline.Collection.extend(schema)
+  let collections = Waterline.Collection.extend(schema)
   _waterline.loadCollection(collections);
 }
 
+/**
+ * @callback initCallback
+ * @param {object} err - An error object
+ * @param {object} models - All orm models
+ */
+
+/**
+ * Initialize waterline orm and iterate through
+ * `init` member function of all registered exseed apps
+ * @param {object} customSettings - The global settings
+ * @param {initCallback} cb - The callback after initialization
+ */
 export function init(customSettings, cb) {
-  assign(appSettings, customSettings);
+  assign(_appSettings, customSettings);
 
   // initialize ORM
-  _waterline.initialize(appSettings.db[ENV], (err, ontology) => {
+  _waterline.initialize(_appSettings.db[ENV], (err, ontology) => {
     if (err) {
       return cb(err);
     }
-    for (let appName in appMap) {
-      let exseedApp = appMap[appName];
+    for (let appName in _appMap) {
+      let exseedApp = _appMap[appName];
       exseedApp.init(ontology.collections);
     }
     cb(null, ontology.collections);
   });
 }
 
+/**
+ * @callback runCallback
+ * @param {object} err - An error object
+ * @param {object} port - The listening port
+ */
+
+/**
+ * Iterate through `routing` member function of all registered exseed apps
+ * and launch the server
+ * @param {runCallback} cb - The callback after serving
+ */
 export function run(cb) {
-  for (let appName in appMap) {
-    let exseedApp = appMap[appName];
-    rootExpressApp.use('/', exseedApp.expressApp);
+  for (let appName in _appMap) {
+    let exseedApp = _appMap[appName];
     exseedApp.routing(exseedApp.expressApp);
   }
-  const port = appSettings.server.port[ENV];
-  rootExpressApp.httpServer = http
-    .createServer(rootExpressApp)
-    .listen(port, cb.bind(this, rootExpressApp, port));
+  const port = _appSettings.server.port[ENV];
+  _rootExpressApp.httpServer = http
+    .createServer(_rootExpressApp)
+    .listen(port, cb.bind(this, _rootExpressApp, port));
 }
+
+/**
+ * To support both import ways:
+ *   import exseed from 'exseed';
+ *   import * as exseed from 'exseed';
+ */
+exports.default = module.exports;
