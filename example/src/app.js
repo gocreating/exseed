@@ -1,28 +1,26 @@
 import * as exseed from 'exseed';
-import Waterline from 'waterline';
 import http from 'http';
 import settings from './settings.server';
 
-const User = Waterline.Collection.extend({
+const User = {
   identity: 'user',
   connection: 'default',
   attributes: {
     firstName: 'string',
     lastName: 'string',
   },
-});
+};
 
-const waterline = new Waterline();
-waterline.loadCollection(User);
-waterline.initialize(settings.db.development, (err, ontology) => {
+exseed.registerApp('basic', require('./basic/').default);
+exseed.registerApp('user', require('./user/').default);
+
+exseed.registerModel(User);
+
+exseed.init(settings, (err, models) => {
   if (err) {
-    return console.error(err);
+    throw err;
   }
-
-  // Tease out fully initialised models.
-  const User = ontology.collections.user;
-
-  User
+  models.user
     .create({
       firstName: 'Neil',
       lastName: 'Armstrong',
@@ -35,9 +33,6 @@ waterline.initialize(settings.db.development, (err, ontology) => {
     });
 });
 
-exseed.init(settings);
-exseed.registerApp('basic', require('./basic/').default);
-exseed.registerApp('user', require('./user/').default);
 exseed.run(app => {
   const port = settings.server.port.development;
   app.httpServer = http

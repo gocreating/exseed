@@ -18,7 +18,6 @@
     "gulp-changed": "^1.3.0"
   },
   "dependencies": {
-    "waterline": "^0.10.26",
     "waterline-sqlite3": "^0.12.4"
   }
 }
