@@ -2,19 +2,19 @@ import * as exseed from 'exseed';
 import http from 'http';
 import settings from './settings.server';
 
-const User = {
-  identity: 'user',
-  connection: 'default',
-  attributes: {
-    firstName: 'string',
-    lastName: 'string',
-  },
-};
+// const User = {
+//   identity: 'user',
+//   connection: 'default',
+//   attributes: {
+//     firstName: 'string',
+//     lastName: 'string',
+//   },
+// };
 
 exseed.registerApp('basic', require('./basic/').default);
 exseed.registerApp('user', require('./user/').default);
 
-exseed.registerModel(User);
+exseed.registerModel(require('./user/models/user').default);
 
 exseed.init(settings, (err, models) => {
   if (err) {

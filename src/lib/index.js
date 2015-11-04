@@ -2,7 +2,7 @@ import express from 'express';
 import Waterline from 'waterline';
 import assign from 'object-assign';
 
-const env = process.env.NODE_ENV || 'development';
+export const env = process.env.NODE_ENV || 'development';
 
 let rootExpressApp = express();
 
