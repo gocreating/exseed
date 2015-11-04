@@ -20,7 +20,7 @@ class UserApp extends App {
           password: 'test',
         })
         .then((user) => {
-          console.log(user.toObject());
+          console.log(user.toJSON());
         })
         .catch((err) => {
           console.error(err);
