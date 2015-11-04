@@ -19,7 +19,7 @@ export default {
           type: 'disk',
           // base on cwd (current working directory)
           filename: './db.development.sqlite',
-          debug: true, // show SQL queries or not
+          debug: false, // show SQL queries or not
         },
       },
     },

@@ -1,6 +1,8 @@
+import http from 'http';
 import express from 'express';
 import Waterline from 'waterline';
 import assign from 'object-assign';
+import async from 'async';
 
 export const ENV = process.env.NODE_ENV || 'development';
 export const env = {
@@ -65,5 +67,8 @@ export function run(cb) {
     rootExpressApp.use('/', exseedApp.expressApp);
     exseedApp.routing(exseedApp.expressApp);
   }
-  cb(rootExpressApp);
+  const port = appSettings.server.port[ENV];
+  rootExpressApp.httpServer = http
+    .createServer(rootExpressApp)
+    .listen(port, cb.bind(this, rootExpressApp, port));
 }
