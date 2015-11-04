@@ -40,6 +40,9 @@ A highly extensible nodejs framework.
 
 These are just code snippets and outlines sketched in my mind, not a really working example
 
+> #### Remind
+> Now the project is under development on `development` branch, and there might be some differences on the code snippets
+
 ### File Structure
 
 The file structure takes the advantage of `django`, which means there are several apps in a project and these apps will run in parallel
