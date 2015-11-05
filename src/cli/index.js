@@ -37,3 +37,5 @@ export function run() {
     nodeApp.stderr.pipe(process.stdout);
   }
 }
+
+run();
