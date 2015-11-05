@@ -14,7 +14,7 @@ export default {
 
     password: {
       type: 'string',
-      required: true
+      required: true,
     },
 
     toJSON() {

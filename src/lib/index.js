@@ -25,7 +25,7 @@ export const env = {
   development: ENV === 'development',
   test: ENV === 'test',
   production: ENV === 'production',
-}
+};
 
 /**
  * App class
@@ -53,11 +53,11 @@ export class App {
 /**
  * Register an exseed app
  * @param {string} appName - An identifier of exseed app
- * @param {App} appClass
+ * @param {App} AppClass
  *   - An exseed app class declaration extends from App
  */
-export function registerApp(appName, appClass) {
-  const appInstance = new appClass();
+export function registerApp(appName, AppClass) {
+  const appInstance = new AppClass();
   _appMap[appName] = appInstance;
   return appInstance;
 }
@@ -67,7 +67,7 @@ export function registerApp(appName, appClass) {
  * @param {object} schema - A waterline schema definition
  */
 export function registerModel(schema) {
-  let collections = Waterline.Collection.extend(schema)
+  let collections = Waterline.Collection.extend(schema);
   _waterline.loadCollection(collections);
 }
 

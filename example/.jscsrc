@@ -1,0 +1,17 @@
+{
+  "preset": "node-style-guide",
+  "esnext": true,
+  "fileExtensions": [".js", ".jsx"],
+  "excludeFiles": [
+    "node_modules/**",
+    "build/**",
+    "src/**/public/**"
+  ],
+  "maximumLineLength": {
+    "value": 80,
+    "allExcept": ["comments", "urlComments", "require"]
+  },
+  "requireCapitalizedComments": null,
+  "requireSemicolons": true,
+  "validateQuoteMarks": null
+}
